@@ -1,7 +1,6 @@
 ##the script use for download kernel and auto update
 
 
-#download latest kernel from kernel.org
 import os
 import sys
 import re
@@ -13,8 +12,9 @@ from excepts import *
 
 kernel_path = "/opt/kernel/"
 kernelorg = "https://www.kernel.org/"
-kernel_name = ""
+kernel_file = ""
 
+#download latest kernel from kernel.org
 def download_latest_kernel():
 	html = urllib2.urlopen(kernelorg).read()
 	soup = BeautifulSoup(html,'lxml')
@@ -29,7 +29,7 @@ def download_latest_kernel():
 			print e.message
 			sys.exit(0)
 
-def latest_kernel__chk():
+def latest_kernel_chk():
 	os.chdir(kernel_path)
 	kernel_list = []
 	latest_kernel = ""
@@ -74,7 +74,15 @@ def kernel_install(kernel):
 		except BuildkernelException as e:
 			print e.message
 			sys.exit(0)
+	else:
+		print "kernel update successful, please reboot to continue"
 
+#build and install the latest kernel
+if __name__ == '__main__':
+	download_latest_kernel()
+	kernel_file = latest_kernel_chk()
+	kernel_install(kernel_file)
+		
 	
 	
 			
